@@ -25,7 +25,7 @@ const channels = {
 
 client.login(process.env.DISCORD_TOKEN);
 
-const millisecondsBeforeRerunningScraper = 5 * 60 * 1000;
+const millisecondsBeforeRerunningScraper = 15 * 60 * 1000;
 
 console.log("**** CONFIG ****");
 console.log(
@@ -120,16 +120,25 @@ module.exports = async function scraper(page) {
     }
 
     console.log("Extracted card data:", trendData);
-    let discordMessage1 = `Top TikTok Trends!`;
-    let discordMessage2 = "";
-    let discordMessage3 = "";
-    let discordMessage4 = "";
-    let discordMessage5 = "";
-    let discordMessage6 = "";
-    let discordMessage7 = "";
-    let discordMessage8 = "";
-    let discordMessage9 = "";
-    let discordMessage10 = "";
+    let discordMessage1 = `---------- Top TikTok Trends ----------`;
+    let discordMessage2 = `
+    .`;
+    let discordMessage3 = `
+    .`;
+    let discordMessage4 = `
+    .`;
+    let discordMessage5 = `
+    .`;
+    let discordMessage6 = `
+    .`;
+    let discordMessage7 = `
+    .`;
+    let discordMessage8 = `
+    .`;
+    let discordMessage9 = `
+    .`;
+    let discordMessage10 = `
+    .`;
 
     for (let [index, trend] of trendData.entries()) {
       let ranking = index + 1;
