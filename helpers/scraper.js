@@ -35,7 +35,7 @@ console.log(
 
 // -------------------
 
-module.exports = async function scraper(page) {
+module.exports = async function scraper(page, pastTrendData = []) {
   try {
     await page.reload({ waitUntil: "networkidle2" });
     console.log("🏁🏁🏁🏁🏁🏁");
@@ -119,95 +119,102 @@ module.exports = async function scraper(page) {
       }
     }
 
-    console.log("Extracted card data:", trendData);
-    let discordMessage1 = `---------- Top TikTok Trends ----------`;
-    let discordMessage2 = `
+    if (trendData.length > 0) {
+      if (trendData.slice(0, 5) === pastTrendData.slice(0, 5)) {
+        setTimeout(async () => {
+          await scraper(page, trendData);
+        }, millisecondsBeforeRerunningScraper);
+      } else {
+        console.log("Extracted card data:", trendData);
+        let discordMessage1 = `---------- Top TikTok Trends ----------`;
+        let discordMessage2 = `
     .`;
-    let discordMessage3 = `
+        let discordMessage3 = `
     .`;
-    let discordMessage4 = `
+        let discordMessage4 = `
     .`;
-    let discordMessage5 = `
+        let discordMessage5 = `
     .`;
-    let discordMessage6 = `
+        let discordMessage6 = `
     .`;
-    let discordMessage7 = `
+        let discordMessage7 = `
     .`;
-    let discordMessage8 = `
+        let discordMessage8 = `
     .`;
-    let discordMessage9 = `
+        let discordMessage9 = `
     .`;
-    let discordMessage10 = `
+        let discordMessage10 = `
     .`;
 
-    for (let [index, trend] of trendData.entries()) {
-      let ranking = index + 1;
-      if (ranking <= 10) {
-        discordMessage1 = `${discordMessage1}
+        for (let [index, trend] of trendData.entries()) {
+          let ranking = index + 1;
+          if (ranking <= 10) {
+            discordMessage1 = `${discordMessage1}
 ${ranking}: [${trend.title}](<${trend.fullLink}>) - ${trend.numOfPosts} Posts`;
-      } else if (ranking > 10 && ranking <= 20) {
-        discordMessage2 = `${discordMessage2}${ranking}: [${trend.title}](<${trend.fullLink}>) - ${trend.numOfPosts} Posts
+          } else if (ranking > 10 && ranking <= 20) {
+            discordMessage2 = `${discordMessage2}${ranking}: [${trend.title}](<${trend.fullLink}>) - ${trend.numOfPosts} Posts
 `;
-      } else if (ranking > 20 && ranking <= 30) {
-        discordMessage3 = `${discordMessage3}${ranking}: [${trend.title}](<${trend.fullLink}>) - ${trend.numOfPosts} Posts
+          } else if (ranking > 20 && ranking <= 30) {
+            discordMessage3 = `${discordMessage3}${ranking}: [${trend.title}](<${trend.fullLink}>) - ${trend.numOfPosts} Posts
 `;
-      } else if (ranking > 30 && ranking <= 40) {
-        discordMessage4 = `${discordMessage4}${ranking}: [${trend.title}](<${trend.fullLink}>) - ${trend.numOfPosts} Posts
+          } else if (ranking > 30 && ranking <= 40) {
+            discordMessage4 = `${discordMessage4}${ranking}: [${trend.title}](<${trend.fullLink}>) - ${trend.numOfPosts} Posts
 `;
-      } else if (ranking > 40 && ranking <= 50) {
-        discordMessage5 = `${discordMessage5}${ranking}: [${trend.title}](<${trend.fullLink}>) - ${trend.numOfPosts} Posts
+          } else if (ranking > 40 && ranking <= 50) {
+            discordMessage5 = `${discordMessage5}${ranking}: [${trend.title}](<${trend.fullLink}>) - ${trend.numOfPosts} Posts
 `;
-      } else if (ranking > 50 && ranking <= 60) {
-        discordMessage6 = `${discordMessage6}${ranking}: [${trend.title}](<${trend.fullLink}>) - ${trend.numOfPosts} Posts
+          } else if (ranking > 50 && ranking <= 60) {
+            discordMessage6 = `${discordMessage6}${ranking}: [${trend.title}](<${trend.fullLink}>) - ${trend.numOfPosts} Posts
 `;
-      } else if (ranking > 60 && ranking <= 70) {
-        discordMessage7 = `${discordMessage7}${ranking}: [${trend.title}](<${trend.fullLink}>) - ${trend.numOfPosts} Posts
+          } else if (ranking > 60 && ranking <= 70) {
+            discordMessage7 = `${discordMessage7}${ranking}: [${trend.title}](<${trend.fullLink}>) - ${trend.numOfPosts} Posts
 `;
-      } else if (ranking > 70 && ranking <= 80) {
-        discordMessage8 = `${discordMessage8}${ranking}: [${trend.title}](<${trend.fullLink}>) - ${trend.numOfPosts} Posts
+          } else if (ranking > 70 && ranking <= 80) {
+            discordMessage8 = `${discordMessage8}${ranking}: [${trend.title}](<${trend.fullLink}>) - ${trend.numOfPosts} Posts
 `;
-      } else if (ranking > 80 && ranking <= 90) {
-        discordMessage9 = `${discordMessage9}${ranking}: [${trend.title}](<${trend.fullLink}>) - ${trend.numOfPosts} Posts
+          } else if (ranking > 80 && ranking <= 90) {
+            discordMessage9 = `${discordMessage9}${ranking}: [${trend.title}](<${trend.fullLink}>) - ${trend.numOfPosts} Posts
 `;
-      } else if (ranking > 90 && ranking <= 100) {
-        discordMessage10 = `${discordMessage10}${ranking}: [${trend.title}](<${trend.fullLink}>) - ${trend.numOfPosts} Posts
+          } else if (ranking > 90 && ranking <= 100) {
+            discordMessage10 = `${discordMessage10}${ranking}: [${trend.title}](<${trend.fullLink}>) - ${trend.numOfPosts} Posts
 `;
-      }
-    }
-    console.log(discordMessage1);
-    console.log(discordMessage2);
-    console.log(discordMessage3);
-    console.log(discordMessage4);
-    console.log(discordMessage5);
-    console.log(discordMessage6);
-    console.log(discordMessage7);
-    console.log(discordMessage8);
-    console.log(discordMessage9);
-    console.log(discordMessage10);
+          }
+        }
+        console.log(discordMessage1);
+        console.log(discordMessage2);
+        console.log(discordMessage3);
+        console.log(discordMessage4);
+        console.log(discordMessage5);
+        console.log(discordMessage6);
+        console.log(discordMessage7);
+        console.log(discordMessage8);
+        console.log(discordMessage9);
+        console.log(discordMessage10);
 
-    const channel = client.channels.cache.get(channels.tiktokTrends);
-    if (channel) {
-      channel
-        .send(discordMessage1)
-        .then(channel.send(discordMessage2))
-        .then(channel.send(discordMessage3))
-        .then(channel.send(discordMessage4))
-        .then(channel.send(discordMessage5))
-        .then(channel.send(discordMessage6))
-        .then(channel.send(discordMessage7))
-        .then(channel.send(discordMessage8))
-        .then(channel.send(discordMessage9))
-        .then(channel.send(discordMessage10));
+        const channel = client.channels.cache.get(channels.tiktokTrends);
+        if (channel) {
+          channel
+            .send(discordMessage1)
+            .then(channel.send(discordMessage2))
+            .then(channel.send(discordMessage3))
+            .then(channel.send(discordMessage4))
+            .then(channel.send(discordMessage5))
+            .then(channel.send(discordMessage6))
+            .then(channel.send(discordMessage7))
+            .then(channel.send(discordMessage8))
+            .then(channel.send(discordMessage9))
+            .then(channel.send(discordMessage10));
+        }
+
+        setTimeout(async () => {
+          await scraper(page, trendData);
+        }, millisecondsBeforeRerunningScraper);
+      }
     } else {
-      console.error("Channel not found!");
       setTimeout(async () => {
         await scraper(page);
-      }, millisecondsBeforeRerunningScraper); // Wait before rerunning scraper
-    }
-
-    setTimeout(async () => {
-      await scraper(page);
-    }, millisecondsBeforeRerunningScraper); // Wait before rerunning scraper
+      }, millisecondsBeforeRerunningScraper);
+    } // Wait before rerunning scraper
   } catch (error) {
     console.log(error);
     setTimeout(async () => {
