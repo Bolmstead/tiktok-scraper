@@ -1,6 +1,9 @@
 require("dotenv").config();
 const cron = require("node-cron");
 const { Client, IntentsBitField } = require("discord.js");
+var player = require("play-sound")((opts = {}));
+const olms2074MGClient = require("../MailGunClients/olms2074MGClient");
+const sendEmail = require("./sendEmail");
 
 // Initialize Discord client
 const client = new Client({
@@ -13,6 +16,7 @@ const client = new Client({
 });
 
 const guildId = "1308992895445110824";
+const myEmail = ["berkleyo@icloud.com"];
 
 const channels = {
   updatedDex: "1308996372942426133", // Channel ID for updated DEX messages
@@ -20,7 +24,7 @@ const channels = {
   boostLeaders: "1308997357911801857",
   walletTracker: "1308996372942426133",
   ctTracker: "1308997890957512744",
-  tiktokTrends: "1309378362288115723",
+  tiktokTrends: "1314120287666831400",
 };
 
 client.login(process.env.DISCORD_TOKEN);
@@ -118,13 +122,34 @@ module.exports = async function scraper(page, pastTrendData = []) {
         console.error("Error extracting data from card:", error);
       }
     }
+    console.log("trendData.slice(0,1)", trendData.slice(0, 1));
+    console.log("pastTrendData.slice(0,1)", pastTrendData.slice(0, 1));
 
-    if (trendData.length > 0) {
-      if (trendData.slice(0, 5) === pastTrendData.slice(0, 5)) {
+    if (pastTrendData.length > 0) {
+      if (
+        trendData[0].title == pastTrendData[0].title &&
+        trendData[0].numOfPosts == pastTrendData[0].numOfPosts &&
+        trendData[1].title == pastTrendData[1].title &&
+        trendData[1].numOfPosts == pastTrendData[1].numOfPosts
+      ) {
+        console.log("TikTok Trends not updated. Running again");
         setTimeout(async () => {
           await scraper(page, trendData);
         }, millisecondsBeforeRerunningScraper);
       } else {
+        console.log("TikTok Trends updated!!");
+
+        player.play("successChime.mp3", function (err) {
+          if (err) throw err;
+        });
+        // My Email
+
+        sendEmail(
+          olms2074MGClient,
+          `Tik Tok Trends Updated!`,
+          myEmail,
+          process.env.OLMS2074_MAILGUN_EMAIL
+        );
         console.log("Extracted card data:", trendData);
         let discordMessage1 = `---------- Top TikTok Trends ----------`;
         let discordMessage2 = `
@@ -211,8 +236,10 @@ ${ranking}: [${trend.title}](<${trend.fullLink}>) - ${trend.numOfPosts} Posts`;
         }, millisecondsBeforeRerunningScraper);
       }
     } else {
+      console.log("Just set Past Trend Data 👍 Running again");
+
       setTimeout(async () => {
-        await scraper(page);
+        await scraper(page, trendData);
       }, millisecondsBeforeRerunningScraper);
     } // Wait before rerunning scraper
   } catch (error) {
