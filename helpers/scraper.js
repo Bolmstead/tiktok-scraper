@@ -6,30 +6,34 @@ const olms2074MGClient = require("../MailGunClients/olms2074MGClient");
 const sendEmail = require("./sendEmail");
 
 // Initialize Discord client
-const client = new Client({
-  intents: [
-    IntentsBitField.Flags.Guilds,
-    IntentsBitField.Flags.GuildMembers,
-    IntentsBitField.Flags.GuildMessages,
-    IntentsBitField.Flags.MessageContent,
-  ],
-});
+// const client = new Client({
+//   intents: [
+//     IntentsBitField.Flags.Guilds,
+//     IntentsBitField.Flags.GuildMembers,
+//     IntentsBitField.Flags.GuildMessages,
+//     IntentsBitField.Flags.MessageContent,
+//   ],
+// });
 
-const guildId = "1308992895445110824";
+const shitcoinTrackerBotToken = process.env.SHITCOIN_TRACKER_TELEGRAM_BOT_TOKEN;
+
+const botsChatId = process.env.BOTS_TELEGRAM_CHAT_ID;
+
+// const guildId = "1308992895445110824";
 const myEmail = ["berkleyo@icloud.com"];
 
-const channels = {
-  updatedDex: "1308996372942426133", // Channel ID for updated DEX messages
-  coinsBoosted: "1308995954216665108",
-  boostLeaders: "1308997357911801857",
-  walletTracker: "1308996372942426133",
-  ctTracker: "1308997890957512744",
-  tiktokTrends: "1314120287666831400",
-};
+// const channels = {
+//   updatedDex: "1308996372942426133", // Channel ID for updated DEX messages
+//   coinsBoosted: "1308995954216665108",
+//   boostLeaders: "1308997357911801857",
+//   walletTracker: "1308996372942426133",
+//   ctTracker: "1308997890957512744",
+//   tiktokTrends: "1314120287666831400",
+// };
 
-client.login(process.env.DISCORD_TOKEN);
+// client.login(process.env.DISCORD_TOKEN);
 
-const millisecondsBeforeRerunningScraper = 15 * 60 * 1000;
+const millisecondsBeforeRerunningScraper = 10 * 60 * 1000;
 
 console.log("**** CONFIG ****");
 console.log(
@@ -38,6 +42,23 @@ console.log(
 );
 
 // -------------------
+
+const sendTikTokTeleMessage = async (msg) => {
+  try {
+    const response = await axios.post(
+      `https://api.telegram.org/bot${shitcoinTrackerBotToken}/sendMessage`,
+      {
+        chat_id: botsChatId,
+        message_thread_id: 6,
+
+        text: msg,
+      }
+    );
+    console.log("Message sent:", response.data);
+  } catch (error) {
+    console.error("Error sending message:", error);
+  }
+};
 
 module.exports = async function scraper(page, pastTrendData = []) {
   try {
@@ -151,85 +172,83 @@ module.exports = async function scraper(page, pastTrendData = []) {
           process.env.OLMS2074_MAILGUN_EMAIL
         );
         console.log("Extracted card data:", trendData);
-        let discordMessage1 = `---------- Top TikTok Trends ----------`;
-        let discordMessage2 = `
+        let tiktokMessage1 = `---------- Top TikTok Trends ----------`;
+        let tiktokMessage2 = `
     .`;
-        let discordMessage3 = `
+        let tiktokMessage3 = `
     .`;
-        let discordMessage4 = `
+        let tiktokMessage4 = `
     .`;
-        let discordMessage5 = `
+        let tiktokMessage5 = `
     .`;
-        let discordMessage6 = `
+        let tiktokMessage6 = `
     .`;
-        let discordMessage7 = `
+        let tiktokMessage7 = `
     .`;
-        let discordMessage8 = `
+        let tiktokMessage8 = `
     .`;
-        let discordMessage9 = `
+        let tiktokMessage9 = `
     .`;
-        let discordMessage10 = `
-    .`;
+        let tiktokMessage10 = `
+    .
+    
+    To view an analysis of each of these trends, go to https://ads.tiktok.com/business/creativecenter/inspiration/popular/hashtag/pc/en`;
 
         for (let [index, trend] of trendData.entries()) {
           let ranking = index + 1;
           if (ranking <= 10) {
-            discordMessage1 = `${discordMessage1}
-${ranking}: [${trend.title}](<${trend.fullLink}>) - ${trend.numOfPosts} Posts`;
+            tiktokMessage1 = `${tiktokMessage1}
+${ranking}: ${trend.title} - ${trend.numOfPosts} Posts`;
           } else if (ranking > 10 && ranking <= 20) {
-            discordMessage2 = `${discordMessage2}${ranking}: [${trend.title}](<${trend.fullLink}>) - ${trend.numOfPosts} Posts
+            tiktokMessage2 = `${tiktokMessage2}${ranking}: ${trend.title} - ${trend.numOfPosts} Posts
 `;
           } else if (ranking > 20 && ranking <= 30) {
-            discordMessage3 = `${discordMessage3}${ranking}: [${trend.title}](<${trend.fullLink}>) - ${trend.numOfPosts} Posts
+            tiktokMessage3 = `${tiktokMessage3}${ranking}: ${trend.title} - ${trend.numOfPosts} Posts
 `;
           } else if (ranking > 30 && ranking <= 40) {
-            discordMessage4 = `${discordMessage4}${ranking}: [${trend.title}](<${trend.fullLink}>) - ${trend.numOfPosts} Posts
+            tiktokMessage4 = `${tiktokMessage4}${ranking}: ${trend.title} - ${trend.numOfPosts} Posts
 `;
           } else if (ranking > 40 && ranking <= 50) {
-            discordMessage5 = `${discordMessage5}${ranking}: [${trend.title}](<${trend.fullLink}>) - ${trend.numOfPosts} Posts
+            tiktokMessage5 = `${tiktokMessage5}${ranking}: ${trend.title} - ${trend.numOfPosts} Posts
 `;
           } else if (ranking > 50 && ranking <= 60) {
-            discordMessage6 = `${discordMessage6}${ranking}: [${trend.title}](<${trend.fullLink}>) - ${trend.numOfPosts} Posts
+            tiktokMessage6 = `${tiktokMessage6}${ranking}: ${trend.title} - ${trend.numOfPosts} Posts
 `;
           } else if (ranking > 60 && ranking <= 70) {
-            discordMessage7 = `${discordMessage7}${ranking}: [${trend.title}](<${trend.fullLink}>) - ${trend.numOfPosts} Posts
+            tiktokMessage7 = `${tiktokMessage7}${ranking}: ${trend.title} - ${trend.numOfPosts} Posts
 `;
           } else if (ranking > 70 && ranking <= 80) {
-            discordMessage8 = `${discordMessage8}${ranking}: [${trend.title}](<${trend.fullLink}>) - ${trend.numOfPosts} Posts
+            tiktokMessage8 = `${tiktokMessage8}${ranking}: ${trend.title} - ${trend.numOfPosts} Posts
 `;
           } else if (ranking > 80 && ranking <= 90) {
-            discordMessage9 = `${discordMessage9}${ranking}: [${trend.title}](<${trend.fullLink}>) - ${trend.numOfPosts} Posts
+            tiktokMessage9 = `${tiktokMessage9}${ranking}: ${trend.title} - ${trend.numOfPosts} Posts
 `;
           } else if (ranking > 90 && ranking <= 100) {
-            discordMessage10 = `${discordMessage10}${ranking}: [${trend.title}](<${trend.fullLink}>) - ${trend.numOfPosts} Posts
+            tiktokMessage10 = `${tiktokMessage10}${ranking}: ${trend.title} - ${trend.numOfPosts} Posts
 `;
           }
         }
-        console.log(discordMessage1);
-        console.log(discordMessage2);
-        console.log(discordMessage3);
-        console.log(discordMessage4);
-        console.log(discordMessage5);
-        console.log(discordMessage6);
-        console.log(discordMessage7);
-        console.log(discordMessage8);
-        console.log(discordMessage9);
-        console.log(discordMessage10);
+        console.log(tiktokMessage1);
+        console.log(tiktokMessage2);
+        console.log(tiktokMessage3);
+        console.log(tiktokMessage4);
+        console.log(tiktokMessage5);
+        console.log(tiktokMessage6);
+        console.log(tiktokMessage7);
+        console.log(tiktokMessage8);
+        console.log(tiktokMessage9);
+        console.log(tiktokMessage10);
 
-        const channel = client.channels.cache.get(channels.tiktokTrends);
-        if (channel) {
-          channel
-            .send(discordMessage1)
-            .then(channel.send(discordMessage2))
-            .then(channel.send(discordMessage3))
-            .then(channel.send(discordMessage4))
-            .then(channel.send(discordMessage5))
-            .then(channel.send(discordMessage6))
-            .then(channel.send(discordMessage7))
-            .then(channel.send(discordMessage8))
-            .then(channel.send(discordMessage9))
-            .then(channel.send(discordMessage10));
-        }
+        sendTikTokTeleMessage(tiktokMessage1)
+          .then(sendTikTokTeleMessage(tiktokMessage2))
+          .then(sendTikTokTeleMessage(tiktokMessage3))
+          .then(sendTikTokTeleMessage(tiktokMessage4))
+          .then(sendTikTokTeleMessage(tiktokMessage5))
+          .then(sendTikTokTeleMessage(tiktokMessage6))
+          .then(sendTikTokTeleMessage(tiktokMessage7))
+          .then(sendTikTokTeleMessage(tiktokMessage8))
+          .then(sendTikTokTeleMessage(tiktokMessage9))
+          .then(sendTikTokTeleMessage(tiktokMessage10));
 
         setTimeout(async () => {
           await scraper(page, trendData);
