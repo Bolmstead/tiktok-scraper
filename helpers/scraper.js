@@ -4,6 +4,7 @@ const { Client, IntentsBitField } = require("discord.js");
 var player = require("play-sound")((opts = {}));
 const olms2074MGClient = require("../MailGunClients/olms2074MGClient");
 const sendEmail = require("./sendEmail");
+const axios = require("axios"); // Import axios
 
 // Initialize Discord client
 // const client = new Client({
@@ -33,7 +34,7 @@ const myEmail = ["berkleyo@icloud.com"];
 
 // client.login(process.env.DISCORD_TOKEN);
 
-const millisecondsBeforeRerunningScraper = 10 * 60 * 1000;
+const millisecondsBeforeRerunningScraper = 1 * 60 * 1000;
 
 console.log("**** CONFIG ****");
 console.log(
@@ -148,10 +149,11 @@ module.exports = async function scraper(page, pastTrendData = []) {
 
     if (pastTrendData.length > 0) {
       if (
-        trendData[0].title == pastTrendData[0].title &&
-        trendData[0].numOfPosts == pastTrendData[0].numOfPosts &&
-        trendData[1].title == pastTrendData[1].title &&
-        trendData[1].numOfPosts == pastTrendData[1].numOfPosts
+        // trendData[0].title == pastTrendData[0].title &&
+        // trendData[0].numOfPosts == pastTrendData[0].numOfPosts &&
+        // trendData[1].title == pastTrendData[1].title &&
+        // trendData[1].numOfPosts == pastTrendData[1].numOfPosts
+        false
       ) {
         console.log("TikTok Trends not updated. Running again");
         setTimeout(async () => {
