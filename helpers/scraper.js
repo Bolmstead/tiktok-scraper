@@ -34,7 +34,7 @@ const myEmail = ["berkleyo@icloud.com"];
 
 // client.login(process.env.DISCORD_TOKEN);
 
-const millisecondsBeforeRerunningScraper = 1 * 60 * 1000;
+const millisecondsBeforeRerunningScraper = 10 * 60 * 1000;
 
 console.log("**** CONFIG ****");
 console.log(
@@ -149,11 +149,10 @@ module.exports = async function scraper(page, pastTrendData = []) {
 
     if (pastTrendData.length > 0) {
       if (
-        // trendData[0].title == pastTrendData[0].title &&
-        // trendData[0].numOfPosts == pastTrendData[0].numOfPosts &&
-        // trendData[1].title == pastTrendData[1].title &&
-        // trendData[1].numOfPosts == pastTrendData[1].numOfPosts
-        false
+        trendData[0].title == pastTrendData[0].title &&
+        trendData[0].numOfPosts == pastTrendData[0].numOfPosts &&
+        trendData[1].title == pastTrendData[1].title &&
+        trendData[1].numOfPosts == pastTrendData[1].numOfPosts
       ) {
         console.log("TikTok Trends not updated. Running again");
         setTimeout(async () => {
@@ -198,59 +197,45 @@ module.exports = async function scraper(page, pastTrendData = []) {
 
         for (let [index, trend] of trendData.entries()) {
           let ranking = index + 1;
-          if (ranking <= 10) {
-            tiktokMessage1 = `${tiktokMessage1}
-${ranking}: ${trend.title} - ${trend.numOfPosts} Posts`;
-          } else if (ranking > 10 && ranking <= 20) {
-            tiktokMessage2 = `${tiktokMessage2}${ranking}: ${trend.title} - ${trend.numOfPosts} Posts
-`;
-          } else if (ranking > 20 && ranking <= 30) {
-            tiktokMessage3 = `${tiktokMessage3}${ranking}: ${trend.title} - ${trend.numOfPosts} Posts
-`;
-          } else if (ranking > 30 && ranking <= 40) {
-            tiktokMessage4 = `${tiktokMessage4}${ranking}: ${trend.title} - ${trend.numOfPosts} Posts
-`;
-          } else if (ranking > 40 && ranking <= 50) {
-            tiktokMessage5 = `${tiktokMessage5}${ranking}: ${trend.title} - ${trend.numOfPosts} Posts
-`;
-          } else if (ranking > 50 && ranking <= 60) {
-            tiktokMessage6 = `${tiktokMessage6}${ranking}: ${trend.title} - ${trend.numOfPosts} Posts
-`;
-          } else if (ranking > 60 && ranking <= 70) {
-            tiktokMessage7 = `${tiktokMessage7}${ranking}: ${trend.title} - ${trend.numOfPosts} Posts
-`;
-          } else if (ranking > 70 && ranking <= 80) {
-            tiktokMessage8 = `${tiktokMessage8}${ranking}: ${trend.title} - ${trend.numOfPosts} Posts
-`;
-          } else if (ranking > 80 && ranking <= 90) {
-            tiktokMessage9 = `${tiktokMessage9}${ranking}: ${trend.title} - ${trend.numOfPosts} Posts
-`;
-          } else if (ranking > 90 && ranking <= 100) {
-            tiktokMessage10 = `${tiktokMessage10}${ranking}: ${trend.title} - ${trend.numOfPosts} Posts
-`;
-          }
-        }
-        console.log(tiktokMessage1);
-        console.log(tiktokMessage2);
-        console.log(tiktokMessage3);
-        console.log(tiktokMessage4);
-        console.log(tiktokMessage5);
-        console.log(tiktokMessage6);
-        console.log(tiktokMessage7);
-        console.log(tiktokMessage8);
-        console.log(tiktokMessage9);
-        console.log(tiktokMessage10);
 
-        sendTikTokTeleMessage(tiktokMessage1)
-          .then(sendTikTokTeleMessage(tiktokMessage2))
-          .then(sendTikTokTeleMessage(tiktokMessage3))
-          .then(sendTikTokTeleMessage(tiktokMessage4))
-          .then(sendTikTokTeleMessage(tiktokMessage5))
-          .then(sendTikTokTeleMessage(tiktokMessage6))
-          .then(sendTikTokTeleMessage(tiktokMessage7))
-          .then(sendTikTokTeleMessage(tiktokMessage8))
-          .then(sendTikTokTeleMessage(tiktokMessage9))
-          .then(sendTikTokTeleMessage(tiktokMessage10));
+          tiktokMessage1 = `${tiktokMessage1}
+${ranking}: ${trend.title} - ${trend.numOfPosts} Posts`;
+          //           } else if (ranking > 10 && ranking <= 20) {
+          //             tiktokMessage2 = `${tiktokMessage2}${ranking}: ${trend.title} - ${trend.numOfPosts} Posts
+          // `;
+          //           } else if (ranking > 20 && ranking <= 30) {
+          //             tiktokMessage3 = `${tiktokMessage3}${ranking}: ${trend.title} - ${trend.numOfPosts} Posts
+          // `;
+          //           } else if (ranking > 30 && ranking <= 40) {
+          //             tiktokMessage4 = `${tiktokMessage4}${ranking}: ${trend.title} - ${trend.numOfPosts} Posts
+          // `;
+          //           } else if (ranking > 40 && ranking <= 50) {
+          //             tiktokMessage5 = `${tiktokMessage5}${ranking}: ${trend.title} - ${trend.numOfPosts} Posts
+          // `;
+          //           } else if (ranking > 50 && ranking <= 60) {
+          //             tiktokMessage6 = `${tiktokMessage6}${ranking}: ${trend.title} - ${trend.numOfPosts} Posts
+          // `;
+          //           } else if (ranking > 60 && ranking <= 70) {
+          //             tiktokMessage7 = `${tiktokMessage7}${ranking}: ${trend.title} - ${trend.numOfPosts} Posts
+          // `;
+          //           } else if (ranking > 70 && ranking <= 80) {
+          //             tiktokMessage8 = `${tiktokMessage8}${ranking}: ${trend.title} - ${trend.numOfPosts} Posts
+          // `;
+          //           } else if (ranking > 80 && ranking <= 90) {
+          //             tiktokMessage9 = `${tiktokMessage9}${ranking}: ${trend.title} - ${trend.numOfPosts} Posts
+          // `;
+          //           } else if (ranking > 90 && ranking <= 100) {
+          //             tiktokMessage10 = `${tiktokMessage10}${ranking}: ${trend.title} - ${trend.numOfPosts} Posts
+          // `;
+        }
+
+        tiktokMessage1 = `${tiktokMessage1}
+        
+To view an analysis of each of these trends, go to https://ads.tiktok.com/business/creativecenter/inspiration/popular/hashtag/pc/en`;
+
+        console.log(tiktokMessage1);
+
+        sendTikTokTeleMessage(tiktokMessage1);
 
         setTimeout(async () => {
           await scraper(page, trendData);
